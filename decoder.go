@@ -21,6 +21,10 @@ type UnmarshalTypeError struct {
 	Pointer jsonptr.Pointer
 }
 
+func (e UnmarshalTypeError) Error() string {
+	return e.Pointer.String() + ": cannot unmarshal " + e.Value + " into Go value of type " + e.Type.String()
+}
+
 type decoder interface {
 	Decode(interface{}) error
 	UseNumber()

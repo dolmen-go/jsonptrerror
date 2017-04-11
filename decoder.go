@@ -62,7 +62,7 @@ func (d *Decoder) Decode(v interface{}) error {
 }
 
 func translateError(document []byte, err error) error {
-	if e, ok := err.(*json.UnmarshalTypeError); ok {
+	if e, ok := err.(*json.UnmarshalTypeError); ok && e != nil {
 		err = &UnmarshalTypeError{*e, pointerAtOffset(document, int(e.Offset))}
 	}
 	return err

@@ -25,6 +25,9 @@ func (e UnmarshalTypeError) Error() string {
 	return e.Pointer.String() + ": cannot unmarshal " + e.Value + " into Go value of type " + e.Type.String()
 }
 
+// Unmarshal parses the JSON-encoded data and stores the result in the value pointed to by v.
+//
+// json.UnmarshalTypeError is translated to the extended jsonptrerror.UnmarshalTypeError
 func Unmarshal(document []byte, v interface{}) error {
 	err := json.Unmarshal(document, v)
 	return translateError(document, err)
@@ -43,6 +46,7 @@ type Decoder struct {
 	err     error
 }
 
+// NewDecoder returns a new decoder that reads from r.
 func NewDecoder(r io.Reader) *Decoder {
 	var d Decoder
 	d.decoder = json.NewDecoder(io.TeeReader(r, &d.input))
@@ -100,12 +104,14 @@ func pointerAtOffset(input []byte, offset int) jsonptr.Pointer {
 		}
 		switch input[i] {
 		case '{':
+			// push state of the new current object on the stack
 			elemStack = append(elemStack, elem{container: '{'})
 			expectKey = true
 		case '[':
+			// push state of the new current array on the stack
 			elemStack = append(elemStack, elem{container: '[', index: 0})
 		case '}', ']':
-			elemStack = elemStack[:len(elemStack)-1]
+			elemStack = elemStack[:len(elemStack)-1] // pop
 		case '"':
 			j := i
 		str:

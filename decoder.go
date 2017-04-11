@@ -82,21 +82,19 @@ func pointerAtOffset(input []byte, offset int) jsonptr.Pointer {
 	var ptr jsonptr.Pointer
 	i := 0
 	type elem struct {
-		container byte
-		property  []byte
-		index     int
+		index    int // -1 means the element is an object
+		property []byte
 	}
 	var elemStack []elem
 	var expectKey bool
 	for {
-		if i == offset {
+		if i >= offset {
 			for _, e := range elemStack {
-				switch e.container {
-				case '{':
+				if e.index == -1 {
 					var name string
 					json.Unmarshal(e.property, &name)
 					ptr.Property(name)
-				case '[':
+				} else {
 					ptr.Index(e.index)
 				}
 			}
@@ -105,11 +103,11 @@ func pointerAtOffset(input []byte, offset int) jsonptr.Pointer {
 		switch input[i] {
 		case '{':
 			// push state of the new current object on the stack
-			elemStack = append(elemStack, elem{container: '{'})
+			elemStack = append(elemStack, elem{index: -1})
 			expectKey = true
 		case '[':
 			// push state of the new current array on the stack
-			elemStack = append(elemStack, elem{container: '[', index: 0})
+			elemStack = append(elemStack, elem{index: 0})
 		case '}', ']':
 			elemStack = elemStack[:len(elemStack)-1] // pop
 		case '"':
@@ -129,7 +127,7 @@ func pointerAtOffset(input []byte, offset int) jsonptr.Pointer {
 				expectKey = false
 			}
 		case ',':
-			if elemStack[len(elemStack)-1].container == '{' {
+			if elemStack[len(elemStack)-1].index == -1 {
 				expectKey = true
 			} else {
 				elemStack[len(elemStack)-1].index++

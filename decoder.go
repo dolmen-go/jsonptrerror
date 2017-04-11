@@ -53,14 +53,19 @@ func (d *Decoder) Decode(v interface{}) error {
 		return d.err
 	}
 	d.err = d.decoder.Decode(v)
-	if err, ok := d.err.(*json.UnmarshalTypeError); ok {
-		d.err = &UnmarshalTypeError{*err, pointerAtOffset(d.input.Bytes(), int(err.Offset))}
-	}
+	d.err = translateError(d.input.Bytes(), d.err)
 	if d.err != nil {
 		d.decoder = nil
 		d.input = bytes.Buffer{}
 	}
 	return d.err
+}
+
+func translateError(document []byte, err error) error {
+	if e, ok := err.(*json.UnmarshalTypeError); ok {
+		err = &UnmarshalTypeError{*e, pointerAtOffset(document, int(e.Offset))}
+	}
+	return err
 }
 
 // pointerAtOffset extracts the JSON Pointer at the start of a value in a *valid* JSON document

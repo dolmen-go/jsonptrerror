@@ -48,85 +48,78 @@ func (d *Decoder) UseNumber() {
 	d.decoder.UseNumber()
 }
 
-const (
-	tokenTopValue = iota
-	tokenArrayValue
-	tokenArrayComma
-	tokenObjectKey
-	tokenObjectColon
-	tokenObjectValue
-	tokenObjectComma
-)
-
 func (d *Decoder) Decode(v interface{}) error {
 	if d.err != nil {
 		return d.err
 	}
 	d.err = d.decoder.Decode(v)
 	if err, ok := d.err.(*json.UnmarshalTypeError); ok {
-		offset := int(err.Offset)
-		input := d.input.Bytes()
-		i := 0
-		type elem struct {
-			container byte
-			property  []byte
-			index     int
-		}
-		var elemStack []elem
-		var expectKey bool
-		for {
-			if i == offset {
-				ptr := jsonptr.Pointer{}
-				for _, e := range elemStack {
-					switch e.container {
-					case '{':
-						var name string
-						json.Unmarshal(e.property, &name)
-						ptr.Property(name)
-					case '[':
-						ptr.Index(e.index)
-					}
-				}
-				d.err = &UnmarshalTypeError{*err, ptr}
-				break
-			}
-			switch input[i] {
-			case '{':
-				elemStack = append(elemStack, elem{container: '{'})
-				expectKey = true
-			case '[':
-				elemStack = append(elemStack, elem{container: '[', index: 0})
-			case '}', ']':
-				elemStack = elemStack[:len(elemStack)-1]
-			case '"':
-				j := i
-			str:
-				for {
-					i++
-					switch input[i] {
-					case '\\':
-						i++
-					case '"':
-						break str
-					}
-				}
-				if expectKey {
-					elemStack[len(elemStack)-1].property = input[j : i+1]
-					expectKey = false
-				}
-			case ',':
-				if elemStack[len(elemStack)-1].container == '{' {
-					expectKey = true
-				} else {
-					elemStack[len(elemStack)-1].index++
-				}
-			}
-			i++
-		}
+		d.err = &UnmarshalTypeError{*err, pointerAtOffset(d.input.Bytes(), int(err.Offset))}
 	}
 	if d.err != nil {
 		d.decoder = nil
 		d.input = bytes.Buffer{}
 	}
 	return d.err
+}
+
+// pointerAtOffset extracts the JSON Pointer at the start of a value in a *valid* JSON document
+func pointerAtOffset(input []byte, offset int) jsonptr.Pointer {
+	var ptr jsonptr.Pointer
+	i := 0
+	type elem struct {
+		container byte
+		property  []byte
+		index     int
+	}
+	var elemStack []elem
+	var expectKey bool
+	for {
+		if i == offset {
+			for _, e := range elemStack {
+				switch e.container {
+				case '{':
+					var name string
+					json.Unmarshal(e.property, &name)
+					ptr.Property(name)
+				case '[':
+					ptr.Index(e.index)
+				}
+			}
+			break
+		}
+		switch input[i] {
+		case '{':
+			elemStack = append(elemStack, elem{container: '{'})
+			expectKey = true
+		case '[':
+			elemStack = append(elemStack, elem{container: '[', index: 0})
+		case '}', ']':
+			elemStack = elemStack[:len(elemStack)-1]
+		case '"':
+			j := i
+		str:
+			for {
+				i++
+				switch input[i] {
+				case '\\':
+					i++
+				case '"':
+					break str
+				}
+			}
+			if expectKey {
+				elemStack[len(elemStack)-1].property = input[j : i+1]
+				expectKey = false
+			}
+		case ',':
+			if elemStack[len(elemStack)-1].container == '{' {
+				expectKey = true
+			} else {
+				elemStack[len(elemStack)-1].index++
+			}
+		}
+		i++
+	}
+	return ptr
 }

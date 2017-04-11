@@ -25,6 +25,11 @@ func (e UnmarshalTypeError) Error() string {
 	return e.Pointer.String() + ": cannot unmarshal " + e.Value + " into Go value of type " + e.Type.String()
 }
 
+func Unmarshal(document []byte, v interface{}) error {
+	err := json.Unmarshal(document, v)
+	return translateError(document, err)
+}
+
 type decoder interface {
 	Decode(interface{}) error
 	UseNumber()

@@ -1,8 +1,6 @@
 /*
 Package jsonptrerror extends encoding/json.Decoder to return unmarshal errors
 located with JSON Pointer (RFC 6091).
-
-The current implementation keeps a duplicate copy of the JSON document in memory.
 */
 package jsonptrerror
 
@@ -57,6 +55,9 @@ func (d *Decoder) UseNumber() {
 	d.decoder.UseNumber()
 }
 
+// Decode reads the next JSON-encoded value from its input and stores it in the value pointed to by v.
+//
+// The current implementation keeps a duplicate copy of the JSON document in memory.
 func (d *Decoder) Decode(v interface{}) error {
 	if d.err != nil {
 		return d.err

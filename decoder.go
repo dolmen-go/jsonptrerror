@@ -62,8 +62,8 @@ func (d *Decoder) Decode(v interface{}) error {
 		return d.err
 	}
 	d.err = d.decoder.Decode(v)
-	d.err = translateError(d.input.Bytes(), d.err)
 	if d.err != nil {
+		d.err = translateError(d.input.Bytes(), d.err)
 		d.decoder = nil
 		d.input = bytes.Buffer{}
 	}

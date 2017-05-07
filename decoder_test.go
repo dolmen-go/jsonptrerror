@@ -120,7 +120,9 @@ func TestInterface(t *testing.T) {
 	}
 	for i := range m1 {
 		if m1[i] != m2[i] {
-			t.Fatalf("decoder interface doesn't match json.Decoder: %#v != %#v", m1[i], m2[i])
+			t.Fatalf("decoder interface doesn't match json.Decoder: %#v != %#v\n"+
+				"Check: grep 'pkg encoding/json, method (\\*Decoder)' $GOROOT/api/go*.txt",
+				m1[i], m2[i])
 		}
 	}
 }

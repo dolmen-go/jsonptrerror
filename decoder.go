@@ -1,6 +1,10 @@
+// +build go1.5
+
 /*
 Package jsonptrerror extends encoding/json.Decoder to return unmarshal errors
 located with JSON Pointer (RFC 6091).
+
+Requires Go 1.5 because it adds an 'Offset' field to type UnmarshalTypeError.
 */
 package jsonptrerror
 
@@ -29,14 +33,6 @@ func (e UnmarshalTypeError) Error() string {
 func Unmarshal(document []byte, v interface{}) error {
 	err := json.Unmarshal(document, v)
 	return translateError(document, err)
-}
-
-type decoder interface {
-	Decode(interface{}) error
-	UseNumber()
-	More() bool
-	Buffered() io.Reader
-	Token() (json.Token, error)
 }
 
 // Decoder is the same as encoding/json.Decoder, except Decode returns

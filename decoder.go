@@ -34,14 +34,17 @@ func Unmarshal(document []byte, v interface{}) error {
 type decoder interface {
 	Decode(interface{}) error
 	UseNumber()
+	More() bool
+	Buffered() io.Reader
+	Token() (json.Token, error)
 }
 
 // Decoder is the same as encoding/json.Decoder, except Decode returns
 // our UnmarshalTypeError (providing a JSON Pointer) instead of encoding/json.UnmarshalTypeError.
 type Decoder struct {
-	decoder decoder
-	input   bytes.Buffer
-	err     error
+	decoder
+	input bytes.Buffer
+	err   error
 }
 
 // NewDecoder returns a new decoder that reads from r.
@@ -49,10 +52,6 @@ func NewDecoder(r io.Reader) *Decoder {
 	var d Decoder
 	d.decoder = json.NewDecoder(io.TeeReader(r, &d.input))
 	return &d
-}
-
-func (d *Decoder) UseNumber() {
-	d.decoder.UseNumber()
 }
 
 // Decode reads the next JSON-encoded value from its input and stores it in the value pointed to by v.
@@ -69,6 +68,20 @@ func (d *Decoder) Decode(v interface{}) error {
 		d.input = bytes.Buffer{}
 	}
 	return d.err
+}
+
+func (d *Decoder) Token() (json.Token, error) {
+	if d.err != nil {
+		return nil, d.err
+	}
+	var tok json.Token
+	tok, d.err = d.decoder.Token()
+	if d.err != nil {
+		d.err = translateError(d.input.Bytes(), d.err)
+		d.decoder = nil
+		d.input = bytes.Buffer{}
+	}
+	return tok, d.err
 }
 
 func translateError(document []byte, err error) error {

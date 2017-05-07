@@ -3,6 +3,9 @@ package jsonptrerror_test
 import (
 	"bytes"
 	"encoding/json"
+	"reflect"
+	"sort"
+	"strings"
 	"testing"
 
 	"github.com/dolmen-go/jsonptrerror"
@@ -57,6 +60,67 @@ func TestDecoder(t *testing.T) {
 			} else {
 				t.Errorf("err = %q, want jsponptrerror.UnmarshalTypeError", err2)
 			}
+		}
+	}
+}
+
+func listTypes(num int, at func(int) reflect.Type) []string {
+	if num == 0 {
+		return nil
+	}
+	res := make([]string, 0, num)
+	for i := 0; i < num; i++ {
+		res = append(res, at(i).String())
+	}
+	return res
+}
+
+func listMethods(p interface{}) []string {
+	t := reflect.ValueOf(p).Type()
+	meths := make([]string, 0, t.NumMethod())
+	for i := 0; i < t.NumMethod(); i++ {
+		m := t.Method(i)
+		// Skip unexported methods
+		if len(m.PkgPath) != 0 {
+			continue
+		}
+		mt := m.Type
+		in := listTypes(mt.NumIn()-1, func(i int) reflect.Type { return mt.In(i + 1) })
+		out := listTypes(mt.NumOut(), mt.Out)
+		sig := bytes.NewBufferString(m.Name)
+		sig.WriteByte('(')
+		if in != nil {
+			sig.WriteString(strings.Join(in, ", "))
+		}
+		sig.WriteByte(')')
+		switch len(out) {
+		case 0:
+		case 1:
+			sig.WriteByte(' ')
+			sig.WriteString(out[0])
+		default:
+			sig.WriteString(" (")
+			sig.WriteString(strings.Join(out, ", "))
+			sig.WriteByte(')')
+		}
+		meths = append(meths, sig.String())
+	}
+	sort.Strings(meths)
+	return meths
+}
+
+func TestInterface(t *testing.T) {
+	m1 := listMethods(&json.Decoder{})
+	m2 := listMethods(&jsonptrerror.Decoder{})
+	if len(m1) == 0 {
+		t.Fatal("bug in listMethods")
+	}
+	if len(m1) != len(m2) {
+		t.Fatalf("%v != %v", m1, m2)
+	}
+	for i := range m1 {
+		if m1[i] != m2[i] {
+			t.Fatalf("decoder interface doesn't match json.Decoder: %#v != %#v", m1[i], m2[i])
 		}
 	}
 }

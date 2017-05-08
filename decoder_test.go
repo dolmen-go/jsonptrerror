@@ -44,24 +44,27 @@ func TestDecoder(t *testing.T) {
 		{` {  "\u002f" : [ 1]}`, new(map[string][]string), "/~1/0"},
 		{`[{},{"a":1}]`, new([]map[string]int), nil},
 		{`[{},{"a":1}]`, new([]map[string]bool), "/1/a"},
-		{`{"a":true,"b":2}]`, new(map[string]bool), "/b"},
+		{`{"a":true,"b":2}`, new(map[string]bool), "/b"},
 		// TODO structs
 	} {
 		t.Logf("%s -> %T", test.in, test.value)
-		//var v1, v2 interface{}
-		err1 := json.NewDecoder(bytes.NewBufferString(test.in)).Decode(test.value)
-		err2 := jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)).Decode(test.value)
-		if (err1 == nil) != (err2 == nil) {
-			t.Errorf("err = %q, want: %q", err2, err1)
-		} else if test.ptr != nil {
-			if err2, ok := err2.(*jsonptrerror.UnmarshalTypeError); ok {
-				if err2.Pointer.String() != test.ptr.(string) {
-					t.Errorf("ptr = %q, want: %q", err2.Pointer, test.ptr)
+
+		errRef := json.NewDecoder(bytes.NewBufferString(test.in)).Decode(test.value)
+		checkErr := func(err error) {
+			if (err == nil) != (errRef == nil) {
+				t.Errorf("err = %q, want: %q", err, errRef)
+			} else if test.ptr != nil {
+				if e, ok := err.(*jsonptrerror.UnmarshalTypeError); ok {
+					if e.Pointer.String() != test.ptr.(string) {
+						t.Errorf("ptr = %q, want: %q", e.Pointer, test.ptr)
+					}
+				} else {
+					t.Errorf("err = %q, want *jsponptrerror.UnmarshalTypeError", err)
 				}
-			} else {
-				t.Errorf("err = %q, want jsponptrerror.UnmarshalTypeError", err2)
 			}
 		}
+
+		checkErr(jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)).Decode(test.value))
 	}
 }
 

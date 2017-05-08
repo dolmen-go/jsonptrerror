@@ -67,6 +67,7 @@ func TestDecoder(t *testing.T) {
 		}
 
 		checkErr(jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)).Decode(deepcopy.Copy(test.value)))
+		checkErr(jsonptrerror.Unmarshal([]byte(test.in), deepcopy.Copy(test.value)))
 	}
 }
 

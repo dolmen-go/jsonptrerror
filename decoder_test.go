@@ -44,6 +44,7 @@ func TestDecoder(t *testing.T) {
 		{` {  "\u002f" : [ 1]}`, new(map[string][]string), "/~1/0"},
 		{`[{},{"a":1}]`, new([]map[string]int), nil},
 		{`[{},{"a":1}]`, new([]map[string]bool), "/1/a"},
+		{`{"a":true,"b":2}]`, new(map[string]bool), "/b"},
 		// TODO structs
 	} {
 		t.Logf("%s -> %T", test.in, test.value)

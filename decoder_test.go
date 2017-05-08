@@ -75,8 +75,10 @@ func TestDecoder(t *testing.T) {
 					if e.Pointer.String() != test.ptr.(string) {
 						t.Errorf("ptr = %q, want: %q", e.Pointer, test.ptr)
 					}
+					//t.Log(e.UnmarshalTypeError.Error())
+					//t.Log(e.Error())
 				} else {
-					t.Errorf("err = %q, want *jsponptrerror.UnmarwshalTypeError", err)
+					t.Errorf("err = %q, want *jsponptrerror.UnmarshalTypeError", err)
 				}
 			}
 			return err

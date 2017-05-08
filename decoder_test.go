@@ -8,6 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/mohae/deepcopy"
+
 	"github.com/dolmen-go/jsonptrerror"
 )
 
@@ -49,7 +51,7 @@ func TestDecoder(t *testing.T) {
 	} {
 		t.Logf("%s -> %T", test.in, test.value)
 
-		errRef := json.NewDecoder(bytes.NewBufferString(test.in)).Decode(test.value)
+		errRef := json.NewDecoder(bytes.NewBufferString(test.in)).Decode(deepcopy.Copy(test.value))
 		checkErr := func(err error) {
 			if (err == nil) != (errRef == nil) {
 				t.Errorf("err = %q, want: %q", err, errRef)
@@ -59,12 +61,12 @@ func TestDecoder(t *testing.T) {
 						t.Errorf("ptr = %q, want: %q", e.Pointer, test.ptr)
 					}
 				} else {
-					t.Errorf("err = %q, want *jsponptrerror.UnmarshalTypeError", err)
+					t.Errorf("err = %q, want *jsponptrerror.UnmarwshalTypeError", err)
 				}
 			}
 		}
 
-		checkErr(jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)).Decode(test.value))
+		checkErr(jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)).Decode(deepcopy.Copy(test.value)))
 	}
 }
 

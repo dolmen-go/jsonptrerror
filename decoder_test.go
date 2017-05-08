@@ -3,6 +3,7 @@ package jsonptrerror_test
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"reflect"
 	"sort"
 	"strings"
@@ -14,6 +15,20 @@ import (
 )
 
 func TestDecoder(t *testing.T) {
+	decodeAll := func(dec interface {
+		Decode(interface{}) error
+		Token() (json.Token, error)
+	}, value interface{}) error {
+		err := dec.Decode(deepcopy.Copy(value))
+		if err == nil {
+			_, err := dec.Token()
+			if err != io.EOF {
+				t.Fatalf("decodeAll unexpected error %q", err)
+			}
+		}
+		return err
+	}
+
 	for _, test := range []struct {
 		in    string
 		value interface{}
@@ -51,8 +66,8 @@ func TestDecoder(t *testing.T) {
 	} {
 		t.Logf("%s -> %T", test.in, test.value)
 
-		errRef := json.NewDecoder(bytes.NewBufferString(test.in)).Decode(deepcopy.Copy(test.value))
-		checkErr := func(err error) {
+		errRef := decodeAll(json.NewDecoder(bytes.NewBufferString(test.in)), test.value)
+		checkErr := func(err error) error {
 			if (err == nil) != (errRef == nil) {
 				t.Errorf("err = %q, want: %q", err, errRef)
 			} else if test.ptr != nil {
@@ -64,9 +79,10 @@ func TestDecoder(t *testing.T) {
 					t.Errorf("err = %q, want *jsponptrerror.UnmarwshalTypeError", err)
 				}
 			}
+			return err
 		}
 
-		checkErr(jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)).Decode(deepcopy.Copy(test.value)))
+		checkErr(decodeAll(jsonptrerror.NewDecoder(bytes.NewBufferString(test.in)), test.value))
 		checkErr(jsonptrerror.Unmarshal([]byte(test.in), deepcopy.Copy(test.value)))
 	}
 }

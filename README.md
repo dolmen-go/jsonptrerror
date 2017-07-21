@@ -6,8 +6,11 @@
 
 ## Status
 
-This is still early work in progress. The interface *may* change, but the aim
-is to mimick (wrap) the [`encoding/json` package](http://golang.org/pkg/encoding/json).
+This package is a wrapper around the standard [`encoding/json` package](https://golang.org/pkg/encoding/json)
+to improve the reporting of location for unmarshalling errors:
+[`UnmarshalTypeError`](https://golang.org/pkg/encoding/json/#UnmarshalTypeError) are enhanced to also include
+a JSON Pointer (see RFC6901) indicating the location of the error: see
+[`jsonptrerror.UnmarshalTypeError`](https://godoc.org/github.com/dolmen-go/jsonptrerror#UnmarshalTypeError).
 
 The aim is code coverage of 100%. Use go coverage tools and consider any
 code not covered by the testsuite as never tested and full of bugs.

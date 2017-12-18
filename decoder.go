@@ -2,7 +2,7 @@
 
 /*
 Package jsonptrerror extends encoding/json.Decoder to return unmarshal errors
-located with JSON Pointer (RFC 6091).
+located with JSON Pointer (RFC 6901).
 
 Requires Go 1.5 because it adds an 'Offset' field to type UnmarshalTypeError.
 */

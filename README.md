@@ -18,8 +18,8 @@ code not covered by the testsuite as never tested and full of bugs.
 
 See [latest coverage report](https://codecov.io/gh/dolmen-go/jsonptrerror/src/master/decoder.go) at codecov.io.
 
-[![Coverage for dolmen-go/jsonptr](https://img.shields.io/codecov/c/github/dolmen-go/jsonptr/master.svg)](https://codecov.io/gh/dolmen-go/jsonptr/branch/master)
-[![Coverage for dolmen-go/jsonptrerror](https://img.shields.io/codecov/c/github/dolmen-go/jsonptrerror/master.svg)](https://codecov.io/gh/dolmen-go/jsonptrerror/branch/master)
+* [![Coverage for dolmen-go/jsonptr](https://img.shields.io/codecov/c/github/dolmen-go/jsonptr/master.svg)](https://codecov.io/gh/dolmen-go/jsonptr/branch/master) [github.com/dolmen-go/jsonptr](https://github.com/dolmen-go/jsonptr)
+* [![Coverage for dolmen-go/jsonptrerror](https://img.shields.io/codecov/c/github/dolmen-go/jsonptrerror/master.svg)](https://codecov.io/gh/dolmen-go/jsonptrerror/branch/master) [github.com/dolmen-go/jsonptrerror](https://github.com/dolmen-go/jsonptrerror)
 
 
 ## License

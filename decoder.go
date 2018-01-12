@@ -17,7 +17,7 @@ import (
 )
 
 // UnmarshalTypeError is an extension of encoding/json.UnmarshalTypeError
-// that also includes the error location as a JSON Pointer (RFC 6901)
+// that also includes the error location as a JSON Pointer (RFC 6901).
 type UnmarshalTypeError struct {
 	json.UnmarshalTypeError
 	Pointer jsonptr.Pointer
@@ -29,7 +29,7 @@ func (e UnmarshalTypeError) Error() string {
 
 // Unmarshal parses the JSON-encoded data and stores the result in the value pointed to by v.
 //
-// json.UnmarshalTypeError is translated to the extended jsonptrerror.UnmarshalTypeError
+// json.UnmarshalTypeError is translated to the extended jsonptrerror.UnmarshalTypeError.
 func Unmarshal(document []byte, v interface{}) error {
 	err := json.Unmarshal(document, v)
 	return translateError(document, err)
@@ -87,7 +87,7 @@ func translateError(document []byte, err error) error {
 	return err
 }
 
-// pointerAtOffset extracts the JSON Pointer at the start of a value in a *valid* JSON document
+// pointerAtOffset extracts the JSON Pointer at the start of a value in a *valid* JSON document.
 func pointerAtOffset(input []byte, offset int) jsonptr.Pointer {
 	var ptr jsonptr.Pointer
 	i := 0

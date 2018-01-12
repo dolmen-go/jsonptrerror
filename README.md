@@ -8,7 +8,7 @@
 This package is a wrapper around the standard [`encoding/json` package](https://golang.org/pkg/encoding/json)
 to improve the reporting of location for unmarshalling errors:
 [`UnmarshalTypeError`](https://golang.org/pkg/encoding/json/#UnmarshalTypeError) are enhanced to also include
-a JSON Pointer (see RFC6901) indicating the location of the error: see
+a JSON Pointer (see [RFC6901](https://tools.ietf.org/html/rfc6901)) indicating the location of the error: see
 [`jsonptrerror.UnmarshalTypeError`](https://godoc.org/github.com/dolmen-go/jsonptrerror#UnmarshalTypeError).
 
 ## Status

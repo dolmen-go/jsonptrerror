@@ -1,4 +1,4 @@
-# jsonptrerror - Extends [`encoding/json`](http://golang.org/pkg/encoding/json) with errors reported as JSON Pointer ([RFC 6901](https://tools.ietf.org/html/rfc6901))
+# jsonptrerror - Extends [`encoding/json`](http://golang.org/pkg/encoding/json/) with errors reported as JSON Pointer ([RFC 6901](https://tools.ietf.org/html/rfc6901))
 
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/dolmen-go/jsonptrerror)
 [![Travis-CI](https://img.shields.io/travis/dolmen-go/jsonptrerror.svg)](https://travis-ci.org/dolmen-go/jsonptrerror)

@@ -24,7 +24,7 @@ type UnmarshalTypeError struct {
 }
 
 func (e UnmarshalTypeError) Error() string {
-	return e.Pointer.String() + ": cannot unmarshal " + e.Value + " into Go value of type " + e.Type.String()
+	return e.Pointer.String() + e.UnmarshalTypeError.Error()[4:] // replace "json" prefix with pointer
 }
 
 // Unmarshal parses the JSON-encoded data and stores the result in the value pointed to by v.

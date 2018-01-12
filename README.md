@@ -4,13 +4,13 @@
 [![Travis-CI](https://img.shields.io/travis/dolmen-go/jsonptrerror.svg)](https://travis-ci.org/dolmen-go/jsonptrerror)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dolmen-go/jsonptrerror)](https://goreportcard.com/report/github.com/dolmen-go/jsonptrerror)
 
-## Status
-
 This package is a wrapper around the standard [`encoding/json` package](https://golang.org/pkg/encoding/json)
 to improve the reporting of location for unmarshalling errors:
 [`UnmarshalTypeError`](https://golang.org/pkg/encoding/json/#UnmarshalTypeError) are enhanced to also include
 a JSON Pointer (see RFC6901) indicating the location of the error: see
 [`jsonptrerror.UnmarshalTypeError`](https://godoc.org/github.com/dolmen-go/jsonptrerror#UnmarshalTypeError).
+
+## Status
 
 The aim is code coverage of 100%. Use go coverage tools and consider any
 code not covered by the testsuite as never tested and full of bugs.

@@ -17,7 +17,13 @@ func ExampleDecoder() {
 	}
 	err := decoder.Decode(&out)
 	fmt.Println(err)
+	if err, ok := err.(*jsonptrerror.UnmarshalTypeError); ok {
+		fmt.Println("Original error:", err.UnmarshalTypeError.Error())
+		fmt.Println("Error location:", err.Pointer)
+	}
 
 	// Output:
 	// /value: cannot unmarshal number into Go value of type bool
+	// Original error: json: cannot unmarshal number into Go struct field .value of type bool
+	// Error location: /value
 }

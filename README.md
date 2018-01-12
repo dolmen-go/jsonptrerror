@@ -2,6 +2,7 @@
 
 [![GoDoc](https://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/dolmen-go/jsonptrerror)
 [![Travis-CI](https://img.shields.io/travis/dolmen-go/jsonptrerror.svg)](https://travis-ci.org/dolmen-go/jsonptrerror)
+[![Codecov](https://img.shields.io/codecov/c/github/dolmen-go/jsonptrerror/master.svg)](https://codecov.io/gh/dolmen-go/jsonptrerror/branch/master)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dolmen-go/jsonptrerror)](https://goreportcard.com/report/github.com/dolmen-go/jsonptrerror)
 
 This package is a wrapper around the standard [`encoding/json` package](https://golang.org/pkg/encoding/json)
@@ -14,6 +15,12 @@ a JSON Pointer (see RFC6901) indicating the location of the error: see
 
 The aim is code coverage of 100%. Use go coverage tools and consider any
 code not covered by the testsuite as never tested and full of bugs.
+
+See [latest coverage report](https://codecov.io/gh/dolmen-go/jsonptrerror/src/master/decoder.go) at codecov.io.
+
+[![Coverage for dolmen-go/jsonptr](https://img.shields.io/codecov/c/github/dolmen-go/jsonptr/master.svg)](https://codecov.io/gh/dolmen-go/jsonptr/branch/master)
+[![Coverage for dolmen-go/jsonptrerror](https://img.shields.io/codecov/c/github/dolmen-go/jsonptrerror/master.svg)](https://codecov.io/gh/dolmen-go/jsonptrerror/branch/master)
+
 
 ## License
 

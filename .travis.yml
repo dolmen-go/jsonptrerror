@@ -4,11 +4,15 @@ go:
 - "1.5"
 - "1.6"
 - "1.7"
-- "1.8"
-- "1.9"
+- 1.8.x
+- 1.9.x
+- 1.10.x
 - tip
 
+go_import_path: github.com/dolmen-go/jsonptrerror
+
 before_install:
+- go list
 - go get -t -v ./...
 
 script:

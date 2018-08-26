@@ -10,6 +10,10 @@ go:
 - "1.6"
 - "1.5"
 
+env:
+# Force use of go.mod for dependencies on Go 1.11
+- GO111MODULE=on
+
 go_import_path: github.com/dolmen-go/jsonptrerror
 
 before_install:

@@ -1,0 +1,4 @@
+github.com/dolmen-go/jsonptr v0.0.0-20180826092722-ad143ce557ba h1:UiFgz2QxKC4+Z1UHe/deisvE4Slt0VcLHMoMTJqmx6E=
+github.com/dolmen-go/jsonptr v0.0.0-20180826092722-ad143ce557ba/go.mod h1:GG6FAkYtUFD/rqS31kfcho/lSCed6Gqm1X0uiIEU0tA=
+github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 h1:RWengNIwukTxcDr9M+97sNutRR1RKhG96O6jWumTTnw=
+github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826/go.mod h1:TaXosZuwdSHYgviHp1DAtfrULt5eUgsSMsZf+YrPgl8=

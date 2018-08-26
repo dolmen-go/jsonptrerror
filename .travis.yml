@@ -18,6 +18,7 @@ go_import_path: github.com/dolmen-go/jsonptrerror
 
 before_install:
 - go list
+- go list -test
 - go get -t -v ./...
 
 script:

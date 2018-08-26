@@ -18,8 +18,7 @@ go_import_path: github.com/dolmen-go/jsonptrerror
 
 before_install:
 - go list
-- go list -test
-- go get -t -v ./...
+- "if [[ `go version` = 'go version go1.1'[1-9][.\\ ]* ]]; then go list -test ; else go get -t -v ./... ; fi"
 
 script:
 - go test -coverprofile=coverage.txt -covermode=atomic

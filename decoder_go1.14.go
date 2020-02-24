@@ -1,4 +1,4 @@
-//+build go1.10,!go1.14
+//+build go1.14
 
 package jsonptrerror
 
@@ -11,6 +11,7 @@ type decoder interface {
 	Decode(interface{}) error
 	UseNumber()
 	DisallowUnknownFields()
+	InputOffset() int64
 	More() bool
 	Buffered() io.Reader
 	Token() (json.Token, error)

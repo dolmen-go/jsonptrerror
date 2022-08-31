@@ -1,7 +1,8 @@
 // The original error message returned by stdlib changed with go1.8.
 // We only test the latest release.
 //
-//+build go1.8 forcego1.8
+//go:build go1.8 || forcego1.8
+// +build go1.8 forcego1.8
 
 package jsonptrerror_test
 

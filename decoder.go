@@ -2,10 +2,10 @@
 // +build go1.5
 
 /*
-Package jsonptrerror extends encoding/json.Decoder to return unmarshal errors
+Package jsonptrerror extends [encoding/json.Decoder] to return unmarshal errors
 located with JSON Pointer (RFC 6901).
 
-Requires Go 1.5 because it adds an 'Offset' field to type UnmarshalTypeError.
+Requires Go 1.5 because it adds an 'Offset' field to type [encoding/json.UnmarshalTypeError].
 */
 package jsonptrerror
 
@@ -17,7 +17,7 @@ import (
 	"github.com/dolmen-go/jsonptr"
 )
 
-// UnmarshalTypeError is an extension of encoding/json.UnmarshalTypeError
+// UnmarshalTypeError is an extension of [encoding/json.UnmarshalTypeError]
 // that also includes the error location as a JSON Pointer (RFC 6901).
 type UnmarshalTypeError struct {
 	json.UnmarshalTypeError
@@ -30,14 +30,14 @@ func (e UnmarshalTypeError) Error() string {
 
 // Unmarshal parses the JSON-encoded data and stores the result in the value pointed to by v.
 //
-// json.UnmarshalTypeError is translated to the extended jsonptrerror.UnmarshalTypeError.
+// [encoding/json.UnmarshalTypeError] is translated to the extended [UnmarshalTypeError].
 func Unmarshal(document []byte, v interface{}) error {
 	err := json.Unmarshal(document, v)
 	return translateError(document, err)
 }
 
-// Decoder is the same as encoding/json.Decoder, except Decode returns
-// our UnmarshalTypeError (providing a JSON Pointer) instead of encoding/json.UnmarshalTypeError.
+// Decoder is the same as [encoding/json.Decoder], except Decode returns
+// our [UnmarshalTypeError] (providing a JSON Pointer) instead of [encoding/json.UnmarshalTypeError].
 type Decoder struct {
 	decoder
 	input bytes.Buffer
